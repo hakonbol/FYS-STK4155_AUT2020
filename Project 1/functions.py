@@ -168,10 +168,35 @@ def k_foldsplit(N, folds):
         foldmask[:,j] = mask
     return foldmask
 
+def surfplotter(x,y,BETA,n, title):
+
+   
+    z_total = create_X(x,y,n) @ BETA
+    z_total = z_total.reshape(x.shape)
+    
+    # Plotting the ith polynomial prediction on [0,1]x[0,1]
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+
+    surf = ax.plot_surface(x, y, z_total, cmap=cm.coolwarm,
+                            linewidth=0, antialiased=False)
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    # Customize the z axis.
+    ax.zaxis.set_major_locator(LinearLocator(10))
+    ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
+    ax.set_title(title, fontsize = 16)
+    ax.set_zlim(-0.10, 1.40)
+
+    # Add a color bar which maps values to colors.
+    fig.colorbar(surf, shrink=0.5, aspect=5)
+    plt.show()
 
 
 
 def betaplot(beta, title):
+    fig, ax = plt.subplots(figsize=(15,6))
     x_pos = np.arange(len(beta))
     ax.bar(x_pos, beta, alpha=0.5,capsize=10)
     ax.set_ylabel('Beta coeffient', fontsize=14)
